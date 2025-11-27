@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Packages - Loving Homes</title>
+    <link rel="stylesheet" href="styles 1.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Loving Homes</div>
+            <img src="C:\Users\shane\OneDrive\Documents\Shane Fernandez BTEC Level 3 IT\Loving Homes\Loving Homes Logo.png" width="100px">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="facilities 1.html">Facilities</a></li>
+                <li><a href="packages 1.html">Packages</a></li>
+                <li><a href="contact 1.html">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Choose the Perfect Package for Your Pooch</h1>
+        <p>We offer a range of packages to suit every dog's needs and energy level. Can't find what you're looking for? <a href="contact 1.html">Contact us</a> to discuss a custom package.</p>
+
+        <div class="package-cards">
+            <div class="card">
+                <h3>Premium Package</h3>
+                <p>The ultimate experience for the discerning dog.</p>
+                <img src="https://images.wagwalkingweb.com/media/daily_wag/blog_articles/hero/1642800424.549621/how-to-walk-bigger-dogs-on-dog-walks.png" width="100px">
+                <ul>
+                    <li>Four walks/activities per day</li>
+                    <li>Access to private grass area</li>
+                    <li>Daily updates and photos sent to you</li>
+                    <li>Treats (as agreed with owner)</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Classic Package</h3>
+                <p>Our most popular all-inclusive package.</p>
+                <img src="https://www.petboardinganddaycare.com/archive/images/articles/volume5edition1/article7d.jpg" width="100px">
+                <ul>
+                    <li>Three walks/activities per day</li>
+                    <li>Indoor play barn access</li>
+                    <li>Relaxation time in our zen zone</li>
+                    <li>One professional grooming session</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Day Package</h3>
+                <p>Perfect for when you're out for the day.</p>
+                <img src="https://media.istockphoto.com/id/910130768/photo/dogs-digging-a-hole-at-baech.jpg?s=612x612&w=0&k=20&c=ItXrlSzKFzJR2hn4na25NDSGnPdVthNaYpxn3Xk-z1k="width="100px">
+                <ul>
+                    <li>Two walks per day</li>
+                    <li>Playtime in the external play area</li>
+                    <li>Access to the agility track</li>
+                    <li>Fun in the sand digging pit</li>
+                </ul>
+            </div>
+        </div>
+<section>
+    <h2>Package Calculator</h2>
+    <div class="calculator">
+        <div class="form-group">
+            <label for="packageSelect">Select Package:</label>
+            <select id="packageSelect">
+                <option value="">Choose a package</option>
+                <option value="premium" data-price="150">Premium Package - $150/night</option>
+                <option value="classic" data-price="100">Classic Package - $100/night</option>
+                <option value="day" data-price="50">Day Package - $50/day</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="nights">Number of Nights/Days:</label>
+            <input type="number" id="nights" min="1" max="30" value="1">
+        </div>
+        
+        <div class="form-group">
+            <label for="extras">Additional Services:</label>
+            <div>
+                <label><input type="checkbox" name="extras" value="20"> Extra Grooming Session (+$20)</label><br>
+                <label><input type="checkbox" name="extras" value="15"> Training Session (+$15)</label><br>
+                <label><input type="checkbox" name="extras" value="25"> Premium Food Plan (+$25)</label>
+            </div>
+        </div>
+        
+        <button onclick="calculateTotal()">Calculate Total</button>
+        
+        <div id="calculationResult" style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px; display: none;">
+            <h3>Cost Breakdown</h3>
+            <p id="baseCost"></p>
+            <p id="extraCost"></p>
+            <p id="totalCost" style="font-weight: bold; font-size: 1.2em;"></p>
+        </div>
+    </div>
+</section>
+
+<script>
+    function calculateTotal() {
+        const packageSelect = document.getElementById('packageSelect');
+        const selectedOption = packageSelect.options[packageSelect.selectedIndex];
+        const nights = parseInt(document.getElementById('nights').value) || 1;
+        
+        if (!selectedOption.value) {
+            alert('Please select a package first!');
+            return;
+        }
+        
+        const basePrice = parseInt(selectedOption.getAttribute('data-price'));
+        const baseCost = basePrice * nights;
+        
+        // Calculate extras
+        let extraCost = 0;
+        const extraCheckboxes = document.querySelectorAll('input[name="extras"]:checked');
+        extraCheckboxes.forEach(checkbox => {
+            extraCost += parseInt(checkbox.value);
+        });
+        
+        const totalCost = baseCost + extraCost;
+        
+        // Display results
+        document.getElementById('baseCost').textContent = `Base Package (${nights} ${nights === 1 ? 'night' : 'nights'}): $${baseCost}`;
+        document.getElementById('extraCost').textContent = `Additional Services: $${extraCost}`;
+        document.getElementById('totalCost').textContent = `Total: $${totalCost}`;
+        
+        document.getElementById('calculationResult').style.display = 'block';
+    }
+    
+    // Add some CSS for the calculator
+    const style = document.createElement('style');
+    style.textContent = `
+        .calculator { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .calculator .form-group { margin-bottom: 15px; }
+        .calculator label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .calculator input[type="number"] { width: 100px; padding: 5px; }
+        .calculator button { background: #18bc9c; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+        .calculator button:hover { background: #15a589; }
+    `;
+    document.head.appendChild(style);
+</script>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Loving Homes. All rights reserved.</p>
+    </footer>
+</body>
+</html>

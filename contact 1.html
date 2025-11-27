@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Loving Homes</title>
+    <link rel="stylesheet" href="styles 1.css">
+    <style>
+        .error { color: red; font-size: 0.9em; margin-top: 5px; }
+        .success { color: green; font-size: 1em; padding: 10px; background: #d4edda; border: 1px solid #c3e6cb; }
+        .form-group { margin-bottom: 1rem; }
+        input:invalid, textarea:invalid { border-color: #ff4444; }
+        input:valid, textarea:valid { border-color: #00C851; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Loving Homes</div>
+            <img src="C:\Users\shane\OneDrive\Documents\Shane Fernandez BTEC Level 3 IT\Loving Homes\Loving Homes Logo.png" width="100px">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="facilities 1.html">Facilities</a></li>
+                <li><a href="packages 1.html">Packages</a></li>
+                <li><a href="contact 1.html">Contact Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Get In Touch</h1>
+        <p>Have a question or want to book a stay for your dog? Fill out the form below.</p>
+
+        <div id="formMessages"></div>
+
+        <form id="contactForm" action="process-booking.php" method="POST">
+            <div class="form-group">
+                <label for="name">Your Name:*</label>
+                <input type="text" id="name" name="name" required minlength="2">
+                <div class="error" id="nameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Your Email:*</label>
+                <input type="email" id="email" name="email" required>
+                <div class="error" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9+\-\s()]{10,}">
+                <div class="error" id="phoneError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="dogName">Your Dog's Name:*</label>
+                <input type="text" id="dogName" name="dogName" required>
+                <div class="error" id="dogNameError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="package">Preferred Package:</label>
+                <select id="package" name="package">
+                    <option value="">Select a package</option>
+                    <option value="premium">Premium Package</option>
+                    <option value="classic">Classic Package</option>
+                    <option value="day">Day Package</option>
+                    <option value="custom">Custom Package</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="checkin">Preferred Check-in Date:</label>
+                <input type="date" id="checkin" name="checkin" min="<?php echo date('Y-m-d'); ?>">
+            </div>
+
+            <div class="form-group">
+                <label for="message">Your Message:*</label>
+                <textarea id="message" name="message" rows="5" required minlength="10"></textarea>
+                <div class="error" id="messageError"></div>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="newsletter" name="newsletter" checked>
+                    Send me updates and special offers
+                </label>
+            </div>
+
+            <button type="submit" id="submitBtn">Send Booking Inquiry</button>
+        </form>
+
+        <section>
+            <h2>Other Ways to Reach Us</h2>
+            <p><strong>Phone:</strong> +852 523-7526</p>
+            <p><strong>Email:</strong> info@lovinghomes.hk</p>
+            <p><strong>Address:</strong> Big Water Viaduct Road, Kwu Tung, Hong Kong</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Loving Homes. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Form validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (validateForm()) {
+                // Show loading state
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.innerHTML = 'Sending...';
+                submitBtn.disabled = true;
+                
+                // In a real scenario, you would send data to server here
+                // For now, we'll simulate success
+                setTimeout(() => {
+                    showMessage('Thank you! Your booking inquiry has been sent successfully. We will contact you within 24 hours.', 'success');
+                    submitBtn.innerHTML = 'Send Booking Inquiry';
+                    submitBtn.disabled = false;
+                    document.getElementById('contactForm').reset();
+                }, 2000);
+            }
+        });
+
+        function validateForm() {
+            let isValid = true;
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const dogName = document.getElementById('dogName').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            // Clear previous errors
+            clearErrors();
+
+            // Name validation
+            if (name.length < 2) {
+                showError('nameError', 'Name must be at least 2 characters long');
+                isValid = false;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('emailError', 'Please enter a valid email address');
+                isValid = false;
+            }
+
+            // Phone validation (if provided)
+            if (phone && !/^[\d+\-\s()]{10,}$/.test(phone.replace(/[\s\-()]/g, ''))) {
+                showError('phoneError', 'Please enter a valid phone number');
+                isValid = false;
+            }
+
+            // Dog name validation
+            if (dogName.length < 2) {
+                showError('dogNameError', 'Please enter your dog\'s name');
+                isValid = false;
+            }
+
+            // Message validation
+            if (message.length < 10) {
+                showError('messageError', 'Message must be at least 10 characters long');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.error');
+            errorElements.forEach(element => {
+                element.textContent = '';
+            });
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('formMessages');
+            messageDiv.innerHTML = `<div class="${type}">${message}</div>`;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        // Real-time validation
+        document.getElementById('name').addEventListener('blur', validateField);
+        document.getElementById('email').addEventListener('blur', validateField);
+        document.getElementById('phone').addEventListener('blur', validateField);
+        document.getElementById('dogName').addEventListener('blur', validateField);
+        document.getElementById('message').addEventListener('blur', validateField);
+
+        function validateField(e) {
+            const field = e.target;
+            const value = field.value.trim();
+            
+            switch(field.id) {
+                case 'name':
+                    if (value.length < 2 && value.length > 0) {
+                        showError('nameError', 'Name must be at least 2 characters');
+                    } else {
+                        showError('nameError', '');
+                    }
+                    break;
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value) && value.length > 0) {
+                        showError('emailError', 'Please enter a valid email');
+                    } else {
+                        showError('emailError', '');
+                    }
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
